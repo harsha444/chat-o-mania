@@ -12,7 +12,7 @@ const passport = require('passport');
 
 const container = require('./container');
 
-container.resolve(function(users){
+container.resolve(function(users, _){
 
     mongoose.Promise = global.Promise;
     mongoose.connect('mongodb://localhost/chat-o-mania', {useMongoClient: true});
@@ -37,7 +37,7 @@ container.resolve(function(users){
 
     function ConfigureExpress(app){
         require('./passport/passport-local');
-        
+
         app.use(express.static('public'));
         app.use(cookieParser());
         app.set('view engine', 'ejs');
@@ -57,5 +57,7 @@ container.resolve(function(users){
         // we ahould use the passport.initialze after the above session for correct working
         app.use(passport.initialize());
         app.use(passport.session());
+        // For setting lodash as global variable to use it in ejs fiels ass well
+        app.locals._ = _;
     }
 });
