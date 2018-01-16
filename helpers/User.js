@@ -8,7 +8,8 @@ module.exports = function(){
             req.checkBody('username', 'Username must not be less than 5').isLength({min: 5});
             req.checkBody('email', 'Email is Required').notEmpty();
             req.checkBody('email', 'Email is invalid').isEmail();
-            req.checkBody('password', 'Password is Required').isLength({min: 5});
+            req.checkBody('password', 'Password is Required').notEmpty();
+            req.checkBody('password', 'Password must not be less than 5').isLength({min: 5});
 
             req.getValidationResult()
                 .then((result) => {
@@ -20,6 +21,28 @@ module.exports = function(){
 
                     req.flash('error', messages);
                     res.redirect('/signup');
+                })
+                .catch((err) => {
+                    return next();
+                })
+        },
+
+        LoginValidation: (req, res, next) => {
+            req.checkBody('email', 'Email is Required').notEmpty();
+            req.checkBody('email', 'Email is invalid').isEmail();
+            req.checkBody('password', 'Password is Required').notEmpty();
+            req.checkBody('password', 'Password must not be less than 5').isLength({min: 5});
+
+            req.getValidationResult()
+                .then((result) => {
+                    const errors = result.array();
+                    const messages = [];
+                    errors.forEach((error) => {
+                        messages.push(error.msg);
+                    });
+
+                    req.flash('error', messages);
+                    res.redirect('/');
                 })
                 .catch((err) => {
                     return next();

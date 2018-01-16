@@ -10,18 +10,25 @@ module.exports = function(_, passport, User){
             router.get('/signup', this.getSignUp);
             router.get('/home', this.homePage);
 
-
+            router.post('/', User.LoginValidation, this.postLogin);
             router.post('/signup', User.SignUpValidation, this.postSignUp)
         },
 
         indexPage: function(req, res){
             // res.render aautomatically goes to views folder, and since index is mentioned, it searches for index file in it
-            return res.render('index');
+            const errors = req.flash('error');
+            return res.render('index', {title:  'chat-o-mania | Login',messages: errors, hasErrors: errors.length > 0});
         },
+
+        postLogin: passport.authenticate('local.login', {
+            successRedirect: '/home',
+            failureRedirect: '/',
+            failureFlash: true
+        }),
 
         getSignUp: function(req, res){
             const errors = req.flash('error');
-            return res.render('signup', {title:  'chat-o-mania | Login',messages: errors, hasErrors: errors.length > 0});
+            return res.render('signup', {title:  'chat-o-mania | Signup',messages: errors, hasErrors: errors.length > 0});
         },
 
         postSignUp: passport.authenticate('local.signup', {
