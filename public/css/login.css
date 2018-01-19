@@ -230,7 +230,15 @@ footer .container .text-muted {
     width: 100px;
 }
 
-.btn-facebook:hover{
+.btn-gplus{
+    background: #e44b34;
+    border-radius: 0;
+    color: #fff;
+    width: 100px;
+}
+
+
+.btn-facebook:hover, .btn-gplus:hover{
     text-decoration: none;
     color: #fff;
 }
